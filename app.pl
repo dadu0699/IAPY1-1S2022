@@ -2,6 +2,7 @@
 % español is change to espanol
 
 % Customer list
+% customer(CustomerID, FirstName, LastName, Nationality, Age, CivilStatus).
 customer(1, jose, morales, guatemala, 27, soltero).
 customer(2, fabrizio, sartini, italia, 25, casado).
 customer(3, gustavo, molina, holanda, 15, soltero).
@@ -27,6 +28,7 @@ customer(23, silverio, perez, mexico, 33, casado).
 customer(24, monica, suarez, mexico, 30, casado).
 
 % Department list
+% department(DepartmentID, Name, TravelTime, LocalLanguage, Weather).
 department(1, peten, 8, espanol, tropical).
 department(2, izabal, 5, espanol, calor).
 department(3, alta_verapaz, 6, espanol, frio).
@@ -52,39 +54,41 @@ department(22, sacatepequez, 2, espanol, templado).
 
 % Hotel list
 % km is removed
-hotel(1, camino_real, 0, 4, 100, 200, 50, 1). % 'zona 9' is change to km 0
-hotel(2, holiday_inn, 0, 4, 200, 350, 75, 2). % 'zona 10' is change to km 0
-hotel(3, hu-nal_ye, 260, 1, 50, 100, 60, 2).
-hotel(4, onetwo, 288, 3, 200, 350, 80, 4).
-hotel(5, paradise, 40, 2, 150, 250, 80, 3).
-hotel(6, tikal, 350, 1, 200, 350, 100, 8).
-hotel(7, atanacio, 102, 5, 350, 700, 100, 12).
-hotel(8, pana_inn, 80, 4, 250, 500, 50, 16).
-hotel(9, tzul, 156, 3, 150, 400, 50, 20).
-hotel(10, ktuz, 150, 3, 300, 600, 50, 18).
-hotel(11, patulul, 67, 3, 300, 500, 150, 7).
-hotel(12, patzul, 90, 2, 250, 400, 100, 17).
-hotel(13, libfresh, 100, 2, 250, 400, 50, 7).
-hotel(14, kenel, 180, 3, 250, 400, 70, 8).
-hotel(15, manoi, 40, 1, 250, 400, 40, 10).
-hotel(16, palmeras, 7, 2, 250, 400, 30, 15).
-hotel(17, ovni, 8, 4, 250, 400, 70, 19).
-hotel(18, ovni2, 270, 5, 250, 400, 95, 21).
-hotel(19, runners, 187, 3, 200, 350, 35, 22).
-hotel(20, tutuc, 365, 4, 150, 280, 25, 14).
-hotel(21, las_palmas, 650, 3, 450, 700, 150, 11).
-hotel(22, kinal, 354, 4, 500, 800, 200, 10).
-hotel(23, prank, 269, 5, 400, 700, 150, 13).
-hotel(24, dona_rosa, 34, 4, 250, 500, 100, 11).
-hotel(25, los_pulpos, 70, 3, 500, 700, 100, 6).
-hotel(26, las_canarias, 65, 2, 450, 600, 200, 10).
-hotel(27, hawaii, 123, 1, 400, 700, 150, 12).
-hotel(28, yocute, 500, 4, 350, 500, 100, 9).
-hotel(29, renuevate, 90, 3, 280, 600, 65, 20).
-hotel(30, las_islas, 241, 2, 340, 600, 80, 14).
-hotel(31, usac, 0, 3, 100, 50, 7, 4). % 'zona 12' is change to km 0
+% hotel(HotelID, Name, Address, Distance, Stars, SingleRoomPrice, DoubleRoomPrice, FoodPrice, DepartmentID).
+hotel(1, camino_real, zona_9, 9, 4, 100, 200, 50, 1).
+hotel(2, holiday_inn, zona_10, 10, 4, 200, 350, 75, 2).
+hotel(3, hu_nal_ye, km_260, 260, 1, 50, 100, 60, 2).
+hotel(4, onetwo, km_288, 288, 3, 200, 350, 80, 4).
+hotel(5, paradise, km_40, 40, 2, 150, 250, 80, 3).
+hotel(6, tikal, km_350, 350, 1, 200, 350, 100, 8).
+hotel(7, atanacio, km_102, 102, 5, 350, 700, 100, 12).
+hotel(8, pana_inn, km_80, 80, 4, 250, 500, 50, 16).
+hotel(9, tzul, km_156, 156, 3, 150, 400, 50, 20).
+hotel(10, ktuz, km_150, 150, 3, 300, 600, 50, 18).
+hotel(11, patulul, km_67, 67, 3, 300, 500, 150, 7).
+hotel(12, patzul, km_90, 90, 2, 250, 400, 100, 17).
+hotel(13, libfresh, km_100, 100, 2, 250, 400, 50, 7).
+hotel(14, kenel, km_180, 180, 3, 250, 400, 70, 8).
+hotel(15, manoi, km_40, 40, 1, 250, 400, 40, 10).
+hotel(16, palmeras, km_7, 7, 2, 250, 400, 30, 15).
+hotel(17, ovni, km_8, 8, 4, 250, 400, 70, 19).
+hotel(18, ovni_2, km_270, 270, 5, 250, 400, 95, 21).
+hotel(19, runners, km_187, 187, 3, 200, 350, 35, 22).
+hotel(20, tutuc, km_365, 365, 4, 150, 280, 25, 14).
+hotel(21, las_palmas, km_650, 650, 3, 450, 700, 150, 11).
+hotel(22, kinal, km_354, 354, 4, 500, 800, 200, 10).
+hotel(23, prank, km_269, 269, 5, 400, 700, 150, 13).
+hotel(24, dona_rosa, km_34, 34, 4, 250, 500, 100, 11).
+hotel(25, los_pulpos, km_70, 70, 3, 500, 700, 100, 6).
+hotel(26, las_canarias, km_65, 65, 2, 450, 600, 200, 10).
+hotel(27, hawaii, km_123, 123, 1, 400, 700, 150, 12).
+hotel(28, yocute, km_500, 500, 4, 350, 500, 100, 9).
+hotel(29, renuevate, km_90, 90, 3, 280, 600, 65, 20).
+hotel(30, las_islas, km_241, 241, 2, 340, 600, 80, 14).
+hotel(31, usac, zona_12, 12, 3, 100, 50, 7, 4).
 
 % Register list
+% registration(RegisterID, CustomerID, HotelID, CheckIn, LengthOfStay, Opinion).
 registration(20, 1, 3, 5/2/2022, 1, 4).
 registration(27, 5, 6, 5/2/2022, 2, 4).
 registration(10, 13, 18, 29/04/2022, 1, 2).
@@ -130,6 +134,7 @@ registration(14, 12, 30, 02/05/2022, 2, 6).
 registration(13, 9, 28, 01/05/2022, 1, 5).
 
 % Employee list
+% employee(EmployeeID, Name, Job, HotelID).
 employee(1, jose_hernandez, chef, 1).
 employee(2, maria_loarca, mesera, 1).
 employee(3, julio_ortega, administrador, 1).
@@ -487,31 +492,72 @@ query_menu:-
 query_menu_option(X):- (
     X==1->execute_query_1;
     X==2->execute_query_2;
+    X==3->execute_query_3;
+    X==4->execute_query_4;
+    X==5->execute_query_5;
     X==8->exit_menu).
 
 
-query_1(CustomerID, Fname, Lname, Nationality, Opinion):-
+query_1(CustomerID, FirstName, LastName, Nationality, Opinion):-
     registration(_, CustomerID, _, _, _, Opinion),
     Opinion > 5,
-    customer(CustomerID, Fname, Lname, Nationality, _, _).
+    customer(CustomerID, FirstName, LastName, Nationality, _, _).
 
 execute_query_1:-
-    query_1(CustomerID, Fname, Lname, Nationality, Opinion),
-    format('Cliente: ~a ~a, NACIONALIDAD: ~a, OPINION: ~a', [Fname, Lname, Nationality, Opinion]),
+    query_1(CustomerID, FirstName, LastName, Nationality, Opinion),
+    format('Cliente: ~a ~a, NACIONALIDAD: ~a, OPINION: ~a', [FirstName, LastName, Nationality, Opinion]),
     nl,
     fail.
 
 
-query_2(DepartmentID, Language, HotelID, CustomerID, Fname, Lname, CivilStatus):-
+query_2(DepartmentID, Language, HotelID, CustomerID, FirstName, LastName, CivilStatus):-
     department(DepartmentID, _, _, Language, _),
     Language == 'espanol',
-    hotel(HotelID, _, _, _, _, _, _, DepartmentID),
+    hotel(HotelID, _, _, _, _, _, _, _, DepartmentID),
     registration(_, CustomerID, HotelID, _, _, _),
-    customer(CustomerID, Fname, Lname, _, _, CivilStatus).
+    customer(CustomerID, FirstName, LastName, _, _, CivilStatus).
 
 execute_query_2:-
-    query_2(DepartmentID, Language, HotelID, CustomerID, Fname, Lname, CivilStatus),
-    format('CLIENTE: ~a ~a, ESTADO-CIVIL: ~a', [Fname, Lname, CivilStatus]),
+    query_2(DepartmentID, Language, HotelID, CustomerID, FirstName, LastName, CivilStatus),
+    format('CLIENTE: ~a ~a, ESTADO-CIVIL: ~a', [FirstName, LastName, CivilStatus]),
+    nl,
+    fail.
+
+
+query_3(HotelID, Opinion, Name):-
+    registration(_, _, HotelID, _, _, Opinion),
+    Opinion > 5,
+    employee(_, Name, _, HotelID).
+
+execute_query_3:-
+    query_3(HotelID, Opinion, Name),
+    format('TRABAJADOR: ~a', [Name]),
+    nl,
+    fail.
+
+
+query_4(HotelID, Opinion, Name, Job):-
+    registration(_, _, HotelID, _, _, Opinion),
+    Opinion == 10,
+    employee(_, Name, Job, HotelID),
+    Job == administrador.
+
+execute_query_4:-
+    query_4(HotelID, Opinion, Name, Job),
+    format('TRABAJADOR: ~a', [Name]),
+    nl,
+    fail.
+
+
+query_5(CustomerID, CivilStatus, HotelID, Name, Address):-
+    customer(CustomerID, _, _, _, _, CivilStatus),
+    CivilStatus == casado,
+    registration(_, CustomerID, HotelID, _, _, _),
+    hotel(HotelID, Name, Address, _, _, _, _, _, _).
+
+execute_query_5:-
+    query_5(CustomerID, CivilStatus, HotelID, Name, Address),
+    format('Hotel: ~a, Direccion: ~a', [Name, Address]),
     nl,
     fail.
 
