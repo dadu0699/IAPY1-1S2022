@@ -51,37 +51,38 @@ department(21, totonicapan, 5, ingles, templado).
 department(22, sacatepequez, 2, espanol, templado).
 
 % Hotel list
-hotel(1, camino_real, zona9, 4, 100, 200, 50, 1).
-hotel(2, holiday_inn, zona10, 4, 200, 350, 75, 2).
-hotel(3, hu-nal_ye, km260, 1, 50, 100, 60, 2).
-hotel(4, onetwo, km288, 3, 200, 350, 80, 4).
-hotel(5, paradise, km40, 2, 150, 250, 80, 3).
-hotel(6, tikal, km350, 1, 200, 350, 100, 8).
-hotel(7, atanacio, km102, 5, 350, 700, 100, 12).
-hotel(8, pana_inn, km80, 4, 250, 500, 50, 16).
-hotel(9, tzul, km156, 3, 150, 400, 50, 20).
-hotel(10, ktuz, km150, 3, 300, 600, 50, 18).
-hotel(11, patulul, km67, 3, 300, 500, 150, 7).
-hotel(12, patzul, km90, 2, 250, 400, 100, 17).
-hotel(13, libfresh, km100, 2, 250, 400, 50, 7).
-hotel(14, kenel, km180, 3, 250, 400, 70, 8).
-hotel(15, manoi, km40, 1, 250, 400, 40, 10).
-hotel(16, palmeras, km7, 2, 250, 400, 30, 15).
-hotel(17, ovni, km8, 4, 250, 400, 70, 19).
-hotel(18, ovni2, km270, 5, 250, 400, 95, 21).
-hotel(19, runners, km187, 3, 200, 350, 35, 22).
-hotel(20, tutuc, km365, 4, 150, 280, 25, 14).
-hotel(21, las_palmas, km650, 3, 450, 700, 150, 11).
-hotel(22, kinal, km354, 4, 500, 800, 200, 10).
-hotel(23, prank, km269, 5, 400, 700, 150, 13).
-hotel(24, dona_rosa, km34, 4, 250, 500, 100, 11).
-hotel(25, los_pulpos, km70, 3, 500, 700, 100, 6).
-hotel(26, las_canarias, km65, 2, 450, 600, 200, 10).
-hotel(27, hawaii, km123, 1, 400, 700, 150, 12).
-hotel(28, yocute, km500, 4, 350, 500, 100, 9).
-hotel(29, renuevate, km90, 3, 280, 600, 65, 20).
-hotel(30, las_islas, km241, 2, 340, 600, 80, 14).
-hotel(31, usac, zona12, 3, 100, 50, 7, 4).
+% km is removed
+hotel(1, camino_real, 0, 4, 100, 200, 50, 1). % 'zona 9' is change to km 0
+hotel(2, holiday_inn, 0, 4, 200, 350, 75, 2). % 'zona 10' is change to km 0
+hotel(3, hu-nal_ye, 260, 1, 50, 100, 60, 2).
+hotel(4, onetwo, 288, 3, 200, 350, 80, 4).
+hotel(5, paradise, 40, 2, 150, 250, 80, 3).
+hotel(6, tikal, 350, 1, 200, 350, 100, 8).
+hotel(7, atanacio, 102, 5, 350, 700, 100, 12).
+hotel(8, pana_inn, 80, 4, 250, 500, 50, 16).
+hotel(9, tzul, 156, 3, 150, 400, 50, 20).
+hotel(10, ktuz, 150, 3, 300, 600, 50, 18).
+hotel(11, patulul, 67, 3, 300, 500, 150, 7).
+hotel(12, patzul, 90, 2, 250, 400, 100, 17).
+hotel(13, libfresh, 100, 2, 250, 400, 50, 7).
+hotel(14, kenel, 180, 3, 250, 400, 70, 8).
+hotel(15, manoi, 40, 1, 250, 400, 40, 10).
+hotel(16, palmeras, 7, 2, 250, 400, 30, 15).
+hotel(17, ovni, 8, 4, 250, 400, 70, 19).
+hotel(18, ovni2, 270, 5, 250, 400, 95, 21).
+hotel(19, runners, 187, 3, 200, 350, 35, 22).
+hotel(20, tutuc, 365, 4, 150, 280, 25, 14).
+hotel(21, las_palmas, 650, 3, 450, 700, 150, 11).
+hotel(22, kinal, 354, 4, 500, 800, 200, 10).
+hotel(23, prank, 269, 5, 400, 700, 150, 13).
+hotel(24, dona_rosa, 34, 4, 250, 500, 100, 11).
+hotel(25, los_pulpos, 70, 3, 500, 700, 100, 6).
+hotel(26, las_canarias, 65, 2, 450, 600, 200, 10).
+hotel(27, hawaii, 123, 1, 400, 700, 150, 12).
+hotel(28, yocute, 500, 4, 350, 500, 100, 9).
+hotel(29, renuevate, 90, 3, 280, 600, 65, 20).
+hotel(30, las_islas, 241, 2, 340, 600, 80, 14).
+hotel(31, usac, 0, 3, 100, 50, 7, 4). % 'zona 12' is change to km 0
 
 % Register list
 registration(20, 1, 3, 5/2/2022, 1, 4).
@@ -430,3 +431,95 @@ employee(298, aracely, oficinista, 30).
 employee(299, carmelo, oficinista, 30).
 employee(300, lorein, oficinista, 31).
 employee(301, yulisa, encargado, 31).
+
+
+% Main menu
+init:-
+    nl,
+    write('Bienvenido al "Sistema Experto"'),
+    nl,
+    write('Seleccione una opcion:'),
+    nl,
+    write('1. Buscar hotel'),
+    nl,
+    write('2. Consultas'),
+    nl,
+    write('3. Salir'),
+    nl,
+    read(Option),
+    menu_option(Option).
+
+menu_option(X):- (
+    X==1->hotel_search_menu; 
+    X==2->query_menu;
+    X==3->exit_menu).
+
+
+hotel_search_menu:-
+    nl,
+    write('Ingrese el nombre del hotel:'),
+    nl.
+
+
+query_menu:-
+    nl,
+    write('Seleccione una opcion:'),
+    nl,
+    write('1. Nombre y nacionalidad de clientes con opiniones mayores de 5'),
+    nl,
+    write('2. Nombre y estado civil de clientes con reservaciones en hoteles que se habla espanol'),
+    nl,
+    write('3. Nombre de trabajadores en hoteles con valoraciones mayores de 5'),
+    nl,
+    write('4. Nombre de Administradores de hoteles con valoraciones de 10'),
+    nl,
+    write('5. Nombre y direccion de hoteles que recibieron a clientes casados'),
+    nl,
+    write('6. Nombre de clientes extranjeros hospedados en departamentos de habla katchikel'),
+    nl,
+    write('7. Nombre y estrellas de hoteles con clientes divorciados'),
+    nl,
+    write('8. Salir'),
+    nl,
+    read(QueryOption),
+    query_menu_option(QueryOption).
+
+query_menu_option(X):- (
+    X==1->execute_query_1;
+    X==2->execute_query_2;
+    X==8->exit_menu).
+
+
+query_1(CustomerID, Fname, Lname, Nationality, Opinion):-
+    registration(_, CustomerID, _, _, _, Opinion),
+    Opinion > 5,
+    customer(CustomerID, Fname, Lname, Nationality, _, _).
+
+execute_query_1:-
+    query_1(CustomerID, Fname, Lname, Nationality, Opinion),
+    format('Cliente: ~a ~a, NACIONALIDAD: ~a, OPINION: ~a', [Fname, Lname, Nationality, Opinion]),
+    nl,
+    fail.
+
+
+query_2(DepartmentID, Language, HotelID, CustomerID, Fname, Lname, CivilStatus):-
+    department(DepartmentID, _, _, Language, _),
+    Language == 'espanol',
+    hotel(HotelID, _, _, _, _, _, _, DepartmentID),
+    registration(_, CustomerID, HotelID, _, _, _),
+    customer(CustomerID, Fname, Lname, _, _, CivilStatus).
+
+execute_query_2:-
+    query_2(DepartmentID, Language, HotelID, CustomerID, Fname, Lname, CivilStatus),
+    format('CLIENTE: ~a ~a, ESTADO-CIVIL: ~a', [Fname, Lname, CivilStatus]),
+    nl,
+    fail.
+
+
+exit_menu:-
+    nl,
+    write('Gracias por utilizar el sistema'),
+    nl,
+    write('Vuelva pronto'),
+    nl,
+    halt.
