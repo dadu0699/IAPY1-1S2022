@@ -477,7 +477,7 @@ hotel_search_menu:-
 
 hotel_search_menu_option(X):- (
     X==1->search_by_budget;
-    X==2->execute_query_2;
+    X==2->search_by_weather;
     X==3->execute_query_3;
     X==4->init).
 
@@ -547,7 +547,7 @@ search_hotel_by_budget_simple_food(Budget, Vehicle, Time):-(
         format('  Precio de comida: Q~a, Precio de habitacion simple: Q~a, Gasto de gasolina: Q~2f', 
             [FoodPrice, SingleRoomPrice, GasolinePrice]),
         nl,
-        Total = (SingleRoomPrice + FoodPrice + (Distance * 2.5)) * Time,
+        Total = (SingleRoomPrice + FoodPrice) * Time + (Distance * 2.5),
         format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
         nl,
         nl,
@@ -575,7 +575,7 @@ search_hotel_by_budget_simple_food_vehicle(Budget, Time, DepartmentName, Weather
 Address, Distance, Stars, SingleRoomPrice, FoodPrice):-
     department(DepartmentID, DepartmentName, _, _, Weather),
     hotel(_, HotelName, Address, Distance, Stars, SingleRoomPrice, _, FoodPrice, DepartmentID),
-    ((SingleRoomPrice + FoodPrice + (Distance * 2.5)) * Time) =< Budget.
+    ((SingleRoomPrice + FoodPrice) * Time + (Distance * 2.5)) =< Budget.
 
 search_hotel_by_budget_simple_food_no_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
 Address, Stars, SingleRoomPrice, FoodPrice):-
@@ -596,7 +596,7 @@ search_hotel_by_budget_simple_no_food(Budget, Vehicle, Time):-(
         format('  Precio de habitacion simple: Q~a, Gasto de gasolina: Q~2f', 
             [SingleRoomPrice, GasolinePrice]),
         nl,
-        Total = (SingleRoomPrice + (Distance * 2.5)) * Time,
+        Total = (SingleRoomPrice) * Time + (Distance * 2.5),
         format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
         nl,
         nl,
@@ -624,7 +624,7 @@ search_hotel_by_budget_simple_no_food_vehicle(Budget, Time, DepartmentName, Weat
 Address, Distance, Stars, SingleRoomPrice):-
     department(DepartmentID, DepartmentName, _, _, Weather),
     hotel(_, HotelName, Address, Distance, Stars, SingleRoomPrice, _, _, DepartmentID),
-    ((SingleRoomPrice + (Distance * 2.5)) * Time) =< Budget.
+    ((SingleRoomPrice) * Time + (Distance * 2.5)) =< Budget.
 
 search_hotel_by_budget_simple_no_food_no_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
 Address, Stars, SingleRoomPrice):-
@@ -645,7 +645,7 @@ search_hotel_by_budget_double_food(Budget, Vehicle, Time):-(
         format('  Precio de comida: Q~a, Precio de habitacion doble: Q~a, Gasto de gasolina: Q~2f', 
             [FoodPrice, DoubleRoomPrice, GasolinePrice]),
         nl,
-        Total = (DoubleRoomPrice + FoodPrice + (Distance * 2.5)) * Time,
+        Total = (DoubleRoomPrice + FoodPrice) * Time + (Distance * 2.5),
         format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
         nl,
         nl,
@@ -660,7 +660,7 @@ search_hotel_by_budget_double_food(Budget, Vehicle, Time):-(
         nl,
         format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
         nl,
-        format('  Precio de comida: Q~a, Precio de doble simple: Q~a', [FoodPrice, DoubleRoomPrice]),
+        format('  Precio de comida: Q~a, Precio de habitacion doble: Q~a', [FoodPrice, DoubleRoomPrice]),
         nl,
         Total = (DoubleRoomPrice + FoodPrice) * Time,
         format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
@@ -673,7 +673,7 @@ search_hotel_by_budget_double_food_vehicle(Budget, Time, DepartmentName, Weather
 Address, Distance, Stars, DoubleRoomPrice, FoodPrice):-
     department(DepartmentID, DepartmentName, _, _, Weather),
     hotel(_, HotelName, Address, Distance, Stars, _, DoubleRoomPrice, FoodPrice, DepartmentID),
-    ((DoubleRoomPrice + FoodPrice + (Distance * 2.5)) * Time) =< Budget.
+    ((DoubleRoomPrice + FoodPrice) * Time + (Distance * 2.5)) =< Budget.
 
 search_hotel_by_budget_double_food_no_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
 Address, Stars, DoubleRoomPrice, FoodPrice):-
@@ -694,7 +694,7 @@ search_hotel_by_budget_double_no_food(Budget, Vehicle, Time):-(
         format('  Precio de habitacion doble: Q~a, Gasto de gasolina: Q~2f', 
             [DoubleRoomPrice, GasolinePrice]),
         nl,
-        Total = (DoubleRoomPrice + (Distance * 2.5)) * Time,
+        Total = (DoubleRoomPrice) * Time + (Distance * 2.5),
         format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
         nl,
         nl,
@@ -722,13 +722,289 @@ search_hotel_by_budget_double_no_food_vehicle(Budget, Time, DepartmentName, Weat
 Address, Distance, Stars, DoubleRoomPrice):-
     department(DepartmentID, DepartmentName, _, _, Weather),
     hotel(_, HotelName, Address, Distance, Stars, _, DoubleRoomPrice, _, DepartmentID),
-    ((DoubleRoomPrice + (Distance * 2.5)) * Time) =< Budget.
+    ((DoubleRoomPrice) * Time + (Distance * 2.5)) =< Budget.
 
 search_hotel_by_budget_double_no_food_no_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
 Address, Stars, DoubleRoomPrice):-
     department(DepartmentID, DepartmentName, _, _, Weather),
     hotel(_, HotelName, Address, _, Stars, _, DoubleRoomPrice, _, DepartmentID),
     ((DoubleRoomPrice) * Time) =< Budget.
+
+
+% WAY 2
+search_by_weather:-
+    nl,
+    write('Seleccione el clima que desea buscar: '),
+    nl,
+    write('1. Calor'),
+    nl,
+    write('2. Frio'),
+    nl,
+    write('3. Templado'),
+    nl,
+    write('4. Tropical'),
+    nl,
+    read(WeatherName),
+    (
+        WeatherName==1->search_by_weather_room_type(calor); 
+        WeatherName==2->search_by_weather_room_type(frio); 
+        WeatherName==3->search_by_weather_room_type(templado); 
+        WeatherName==4->search_by_weather_room_type(tropical)).
+
+search_by_weather_room_type(WeatherName):-
+    nl,
+    write('Seleccione el tipo de habitacion:'),
+    nl,
+    write('1. Simple'),
+    nl,
+    write('2. Doble'),
+    nl,
+    read(RoomType),
+    search_by_weather_distance(WeatherName, RoomType).
+
+search_by_weather_distance(WeatherName, RoomType):-
+    nl,
+    write('Ingrese la distancia maxima que desea recorrer: '),
+    nl,
+    read(MaxDistance),
+    search_by_weather_food(WeatherName, MaxDistance, RoomType).
+
+search_by_weather_food(WeatherName, MaxDistance, RoomType):-
+    nl,
+    write('Desea incluir alimentacion? (s/n)'),
+    nl,
+    read(Food),
+    search_by_weather_vehicle(WeatherName, MaxDistance, RoomType, Food).
+
+search_by_weather_vehicle(WeatherName, MaxDistance, RoomType, Food):-
+    nl,
+    write('Desea incluir vehiculo? (s/n)'),
+    nl,
+    read(Vehicle),
+    search_by_weather_time(WeatherName, MaxDistance, RoomType, Food, Vehicle).
+
+search_by_weather_time(WeatherName, MaxDistance, RoomType, Food, Vehicle):-
+    nl,
+    write('Cuantos dias desea de estadia?'),
+    nl,
+    read(Time),
+    search_hotel_by_weather(WeatherName, MaxDistance, RoomType, Food, Vehicle, Time).
+
+search_hotel_by_weather(WeatherName, MaxDistance, RoomType, Food, Vehicle, Time):-(
+    RoomType==1->search_hotel_by_weather_simple(WeatherName, MaxDistance, Food, Vehicle, Time);
+    RoomType==2->search_hotel_by_weather_double(WeatherName, MaxDistance, Food, Vehicle, Time)).
+
+search_hotel_by_weather_simple(WeatherName, MaxDistance, Food, Vehicle, Time):-(
+    Food==s->search_hotel_by_weather_simple_food(WeatherName, MaxDistance, Vehicle, Time);
+    Food==n->search_hotel_by_weather_simple_no_food(WeatherName, MaxDistance, Vehicle, Time)).
+
+search_hotel_by_weather_double(WeatherName, MaxDistance, Food, Vehicle, Time):-(
+    Food==s->search_hotel_by_weather_double_food(WeatherName, MaxDistance, Vehicle, Time);
+    Food==n->search_hotel_by_weather_double_no_food(WeatherName, MaxDistance, Vehicle, Time)).
+
+search_hotel_by_weather_simple_food(WeatherName, MaxDistance, Vehicle, Time):-(
+    Vehicle==s->(
+        nl,
+        search_hotel_by_weather_simple_food_vehicle(WeatherName, MaxDistance, DepartmentName, 
+            HotelName, Address, Distance, Stars, SingleRoomPrice, FoodPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a, Distancia: ~akm', [DepartmentName, WeatherName, Distance]),
+        nl,
+        GasolinePrice = Distance * 2.5,
+        format('  Precio de comida: Q~a, Precio de habitacion simple: Q~a, Gasto de gasolina: Q~2f', 
+            [FoodPrice, SingleRoomPrice, GasolinePrice]),
+        nl,
+        Total = (SingleRoomPrice + FoodPrice) * Time + (Distance * 2.5),
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu);
+
+    Vehicle==n->(
+        nl,
+        search_hotel_by_weather_simple_food_no_vehicle(WeatherName, MaxDistance, DepartmentName, 
+            HotelName, Address, Distance, Stars, SingleRoomPrice, FoodPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a, Distancia: ~akm', [DepartmentName, WeatherName, Distance]),
+        nl,
+        format('  Precio de comida: Q~a, Precio de habitacion simple: Q~a', [FoodPrice, SingleRoomPrice]),
+        nl,
+        Total = (SingleRoomPrice + FoodPrice) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu)).
+
+search_hotel_by_weather_simple_food_vehicle(WeatherName, MaxDistance, DepartmentName, HotelName, 
+Address, Distance, Stars, SingleRoomPrice, FoodPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    Weather == WeatherName,
+    hotel(_, HotelName, Address, Distance, Stars, SingleRoomPrice, _, FoodPrice, DepartmentID),
+    Distance =< MaxDistance.
+
+search_hotel_by_weather_simple_food_no_vehicle(WeatherName, MaxDistance, DepartmentName, HotelName, 
+Address, Distance, Stars, SingleRoomPrice, FoodPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    Weather == WeatherName,
+    hotel(_, HotelName, Address, Distance, Stars, SingleRoomPrice, _, FoodPrice, DepartmentID),
+    Distance =< MaxDistance.
+
+search_hotel_by_weather_simple_no_food(WeatherName, MaxDistance, Vehicle, Time):-(
+    Vehicle==s->(
+        nl,
+        search_hotel_by_weather_simple_no_food_vehicle(WeatherName, MaxDistance, DepartmentName, 
+            HotelName, Address, Distance, Stars, SingleRoomPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a, Distancia: ~akm', [DepartmentName, WeatherName, Distance]),
+        nl,
+        GasolinePrice = Distance * 2.5,
+        format('  Precio de habitacion simple: Q~a, Gasto de gasolina: Q~2f', 
+            [SingleRoomPrice, GasolinePrice]),
+        nl,
+        Total = (SingleRoomPrice) * Time + (Distance * 2.5),
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu);
+
+    Vehicle==n->(
+        nl,
+        search_hotel_by_weather_simple_no_food_no_vehicle(WeatherName, MaxDistance, DepartmentName, 
+            HotelName, Address, Distance, Stars, SingleRoomPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a, Distancia: ~akm', [DepartmentName, WeatherName, Distance]),
+        nl,
+        format('  Precio de habitacion simple: Q~a', [SingleRoomPrice]),
+        nl,
+        Total = (SingleRoomPrice) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu)).
+
+search_hotel_by_weather_simple_no_food_vehicle(WeatherName, MaxDistance, DepartmentName, HotelName, 
+Address, Distance, Stars, SingleRoomPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    Weather == WeatherName,
+    hotel(_, HotelName, Address, Distance, Stars, SingleRoomPrice, _, _, DepartmentID),
+    Distance =< MaxDistance.
+
+search_hotel_by_weather_simple_no_food_no_vehicle(WeatherName, MaxDistance, DepartmentName, HotelName, 
+Address, Distance, Stars, SingleRoomPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    Weather == WeatherName,
+    hotel(_, HotelName, Address, Distance, Stars, SingleRoomPrice, _, _, DepartmentID),
+    Distance =< MaxDistance.
+
+search_hotel_by_weather_double_food(WeatherName, MaxDistance, Vehicle, Time):-(
+    Vehicle==s->(
+        nl,
+        search_hotel_by_weather_double_food_vehicle(WeatherName, MaxDistance, DepartmentName, 
+            HotelName, Address, Distance, Stars, DoubleRoomPrice, FoodPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a, Distancia: ~akm', [DepartmentName, WeatherName, Distance]),
+        nl,
+        GasolinePrice = Distance * 2.5,
+        format('  Precio de comida: Q~a, Precio de habitacion doble: Q~a, Gasto de gasolina: Q~2f', 
+            [FoodPrice, DoubleRoomPrice, GasolinePrice]),
+        nl,
+        Total = (DoubleRoomPrice + FoodPrice) * Time + (Distance * 2.5),
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu);
+
+    Vehicle==n->(
+        nl,
+        search_hotel_by_weather_double_food_no_vehicle(WeatherName, MaxDistance, DepartmentName, 
+            HotelName, Address, Distance, Stars, DoubleRoomPrice, FoodPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a, Distancia: ~akm', [DepartmentName, WeatherName, Distance]),
+        nl,
+        format('  Precio de comida: Q~a, Precio de habitacion doble: Q~a', [FoodPrice, DoubleRoomPrice]),
+        nl,
+        Total = (DoubleRoomPrice + FoodPrice) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu)).
+
+search_hotel_by_weather_double_food_vehicle(WeatherName, MaxDistance, DepartmentName, HotelName, 
+Address, Distance, Stars, DoubleRoomPrice, FoodPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    Weather == WeatherName,
+    hotel(_, HotelName, Address, Distance, Stars, _, DoubleRoomPrice, FoodPrice, DepartmentID),
+    Distance =< MaxDistance.
+
+search_hotel_by_weather_double_food_no_vehicle(WeatherName, MaxDistance, DepartmentName, HotelName, 
+Address, Distance, Stars, DoubleRoomPrice, FoodPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    Weather == WeatherName,
+    hotel(_, HotelName, Address, Distance, Stars, _, DoubleRoomPrice, FoodPrice, DepartmentID),
+    Distance =< MaxDistance.
+
+search_hotel_by_weather_double_no_food(WeatherName, MaxDistance, Vehicle, Time):-(
+    Vehicle==s->(
+        nl,
+        search_hotel_by_weather_double_no_food_vehicle(WeatherName, MaxDistance, DepartmentName, 
+            HotelName, Address, Distance, Stars, DoubleRoomPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a, Distancia: ~akm', [DepartmentName, WeatherName, Distance]),
+        nl,
+        GasolinePrice = Distance * 2.5,
+        format('  Precio de habitacion doble: Q~a, Gasto de gasolina: Q~2f', 
+            [DoubleRoomPrice, GasolinePrice]),
+        nl,
+        Total = (DoubleRoomPrice) * Time + (Distance * 2.5),
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu);
+
+    Vehicle==n->(
+        nl,
+        search_hotel_by_weather_double_no_food_no_vehicle(WeatherName, MaxDistance, DepartmentName, 
+            HotelName, Address, Distance, Stars, DoubleRoomPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a, Distancia: ~akm', [DepartmentName, WeatherName, Distance]),
+        nl,
+        format('  Precio de habitacion doble: Q~a', [DoubleRoomPrice]),
+        nl,
+        Total = (DoubleRoomPrice) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu)).
+
+search_hotel_by_weather_double_no_food_vehicle(WeatherName, MaxDistance, DepartmentName, HotelName, 
+Address, Distance, Stars, DoubleRoomPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    Weather == WeatherName,
+    hotel(_, HotelName, Address, Distance, Stars, _, DoubleRoomPrice, _, DepartmentID),
+    Distance =< MaxDistance.
+
+search_hotel_by_weather_double_no_food_no_vehicle(WeatherName, MaxDistance, DepartmentName, HotelName, 
+Address, Distance, Stars, DoubleRoomPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    Weather == WeatherName,
+    hotel(_, HotelName, Address, Distance, Stars, _, DoubleRoomPrice, _, DepartmentID),
+    Distance =< MaxDistance.
 
 
 % QUERIES
