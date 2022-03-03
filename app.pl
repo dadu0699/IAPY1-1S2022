@@ -55,8 +55,8 @@ department(22, sacatepequez, 2, espanol, templado).
 % Hotel list
 % km is removed
 % hotel(HotelID, Name, Address, Distance, Stars, SingleRoomPrice, DoubleRoomPrice, FoodPrice, DepartmentID).
-hotel(1, camino_real, zona_9, 9, 4, 100, 200, 50, 1).
-hotel(2, holiday_inn, zona_10, 10, 4, 200, 350, 75, 2).
+hotel(1, camino_real, zona_9, 0, 4, 100, 200, 50, 1).
+hotel(2, holiday_inn, zona_10, 0, 4, 200, 350, 75, 2).
 hotel(3, hu_nal_ye, km_260, 260, 1, 50, 100, 60, 2).
 hotel(4, onetwo, km_288, 288, 3, 200, 350, 80, 4).
 hotel(5, paradise, km_40, 40, 2, 150, 250, 80, 3).
@@ -85,7 +85,7 @@ hotel(27, hawaii, km_123, 123, 1, 400, 700, 150, 12).
 hotel(28, yocute, km_500, 500, 4, 350, 500, 100, 9).
 hotel(29, renuevate, km_90, 90, 3, 280, 600, 65, 20).
 hotel(30, las_islas, km_241, 241, 2, 340, 600, 80, 14).
-hotel(31, usac, zona_12, 12, 3, 100, 50, 7, 4).
+hotel(31, usac, zona_12, 0, 3, 100, 50, 7, 4).
 
 % Register list
 % registration(RegisterID, CustomerID, HotelID, CheckIn, LengthOfStay, Opinion).
@@ -462,10 +462,276 @@ menu_option(X):- (
 
 hotel_search_menu:-
     nl,
-    write('Ingrese el nombre del hotel:'),
-    nl.
+    write('Seleccione una opcion de busqueda:'),
+    nl,
+    write('1. Presupuesto base'),
+    nl,
+    write('2. Clima deseado'),
+    nl,
+    write('3. Cantidad minima de estrellas'),
+    nl,
+    write('4. salir'),
+    nl,
+    read(HotelMenuOption),
+    hotel_search_menu_option(HotelMenuOption).
+
+hotel_search_menu_option(X):- (
+    X==1->search_by_budget;
+    X==2->execute_query_2;
+    X==3->execute_query_3;
+    X==4->init).
 
 
+% WAY 1
+search_by_budget:-
+    nl,
+    write('Ingrese el presupuesto base:'),
+    nl,
+    read(Budget),
+    search_by_budget_room_type(Budget).
+
+search_by_budget_room_type(Budget):-
+    nl,
+    write('Seleccione el tipo de habitacion:'),
+    nl,
+    write('1. Simple'),
+    nl,
+    write('2. Doble'),
+    nl,
+    read(RoomType),
+    search_by_budget_food(Budget, RoomType).
+
+search_by_budget_food(Budget, RoomType):-
+    nl,
+    write('Desea incluir alimentacion? (s/n)'),
+    nl,
+    read(Food),
+    search_by_budget_vehicle(Budget, RoomType, Food).
+
+search_by_budget_vehicle(Budget, RoomType, Food):-
+    nl,
+    write('Desea incluir vehiculo? (s/n)'),
+    nl,
+    read(Vehicle),
+    search_by_budget_time(Budget, RoomType, Food, Vehicle).
+
+search_by_budget_time(Budget, RoomType, Food, Vehicle):-
+    nl,
+    write('Cuantos dias desea de estadia?'),
+    nl,
+    read(Time),
+    search_hotel_by_budget(Budget, RoomType, Food, Vehicle, Time).
+
+search_hotel_by_budget(Budget, RoomType, Food, Vehicle, Time):-(
+    RoomType==1->search_hotel_by_budget_simple(Budget, Food, Vehicle, Time);
+    RoomType==2->search_hotel_by_budget_double(Budget, Food, Vehicle, Time)).
+
+search_hotel_by_budget_simple(Budget, Food, Vehicle, Time):-(
+    Food==s->search_hotel_by_budget_simple_food(Budget, Vehicle, Time);
+    Food==n->search_hotel_by_budget_simple_no_food(Budget, Vehicle, Time)).
+
+search_hotel_by_budget_double(Budget, Food, Vehicle, Time):-(
+    Food==s->search_hotel_by_budget_double_food(Budget, Vehicle, Time);
+    Food==n->search_hotel_by_budget_double_no_food(Budget, Vehicle, Time)).
+
+search_hotel_by_budget_simple_food(Budget, Vehicle, Time):-(
+    Vehicle==s->(
+        nl,
+        search_hotel_by_budget_simple_food_vehicle(Budget, Time, DepartmentName, 
+            Weather, HotelName, Address, Distance, Stars, SingleRoomPrice, FoodPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
+        nl,
+        GasolinePrice = Distance * 2.5,
+        format('  Precio de comida: Q~a, Precio de habitacion simple: Q~a, Gasto de gasolina: Q~2f', 
+            [FoodPrice, SingleRoomPrice, GasolinePrice]),
+        nl,
+        Total = (SingleRoomPrice + FoodPrice + (Distance * 2.5)) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu);
+
+    Vehicle==n->(
+        nl,
+        search_hotel_by_budget_simple_food_no_vehicle(Budget, Time, DepartmentName, 
+            Weather, HotelName, Address, Stars, SingleRoomPrice, FoodPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
+        nl,
+        format('  Precio de comida: Q~a, Precio de habitacion simple: Q~a', [FoodPrice, SingleRoomPrice]),
+        nl,
+        Total = (SingleRoomPrice + FoodPrice) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu)).
+
+search_hotel_by_budget_simple_food_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
+Address, Distance, Stars, SingleRoomPrice, FoodPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    hotel(_, HotelName, Address, Distance, Stars, SingleRoomPrice, _, FoodPrice, DepartmentID),
+    ((SingleRoomPrice + FoodPrice + (Distance * 2.5)) * Time) =< Budget.
+
+search_hotel_by_budget_simple_food_no_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
+Address, Stars, SingleRoomPrice, FoodPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    hotel(_, HotelName, Address, _, Stars, SingleRoomPrice, _, FoodPrice, DepartmentID),
+    ((SingleRoomPrice + FoodPrice) * Time) =< Budget.
+
+search_hotel_by_budget_simple_no_food(Budget, Vehicle, Time):-(
+    Vehicle==s->(
+        nl,
+        search_hotel_by_budget_simple_no_food_vehicle(Budget, Time, DepartmentName, 
+            Weather, HotelName, Address, Distance, Stars, SingleRoomPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
+        nl,
+        GasolinePrice = Distance * 2.5,
+        format('  Precio de habitacion simple: Q~a, Gasto de gasolina: Q~2f', 
+            [SingleRoomPrice, GasolinePrice]),
+        nl,
+        Total = (SingleRoomPrice + (Distance * 2.5)) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu);
+
+    Vehicle==n->(
+        nl,
+        search_hotel_by_budget_simple_no_food_no_vehicle(Budget, Time, DepartmentName, 
+            Weather, HotelName, Address, Stars, SingleRoomPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
+        nl,
+        format('  Precio de habitacion simple: Q~a', [SingleRoomPrice]),
+        nl,
+        Total = (SingleRoomPrice) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu)).
+
+search_hotel_by_budget_simple_no_food_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
+Address, Distance, Stars, SingleRoomPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    hotel(_, HotelName, Address, Distance, Stars, SingleRoomPrice, _, _, DepartmentID),
+    ((SingleRoomPrice + (Distance * 2.5)) * Time) =< Budget.
+
+search_hotel_by_budget_simple_no_food_no_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
+Address, Stars, SingleRoomPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    hotel(_, HotelName, Address, _, Stars, SingleRoomPrice, _, _, DepartmentID),
+    ((SingleRoomPrice) * Time) =< Budget.
+
+search_hotel_by_budget_double_food(Budget, Vehicle, Time):-(
+    Vehicle==s->(
+        nl,
+        search_hotel_by_budget_double_food_vehicle(Budget, Time, DepartmentName, 
+            Weather, HotelName, Address, Distance, Stars, DoubleRoomPrice, FoodPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
+        nl,
+        GasolinePrice = Distance * 2.5,
+        format('  Precio de comida: Q~a, Precio de habitacion doble: Q~a, Gasto de gasolina: Q~2f', 
+            [FoodPrice, DoubleRoomPrice, GasolinePrice]),
+        nl,
+        Total = (DoubleRoomPrice + FoodPrice + (Distance * 2.5)) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu);
+
+    Vehicle==n->(
+        nl,
+        search_hotel_by_budget_double_food_no_vehicle(Budget, Time, DepartmentName, 
+            Weather, HotelName, Address, Stars, DoubleRoomPrice, FoodPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
+        nl,
+        format('  Precio de comida: Q~a, Precio de doble simple: Q~a', [FoodPrice, DoubleRoomPrice]),
+        nl,
+        Total = (DoubleRoomPrice + FoodPrice) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu)).
+
+search_hotel_by_budget_double_food_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
+Address, Distance, Stars, DoubleRoomPrice, FoodPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    hotel(_, HotelName, Address, Distance, Stars, _, DoubleRoomPrice, FoodPrice, DepartmentID),
+    ((DoubleRoomPrice + FoodPrice + (Distance * 2.5)) * Time) =< Budget.
+
+search_hotel_by_budget_double_food_no_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
+Address, Stars, DoubleRoomPrice, FoodPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    hotel(_, HotelName, Address, _, Stars, _, DoubleRoomPrice, FoodPrice, DepartmentID),
+    ((DoubleRoomPrice + FoodPrice) * Time) =< Budget.
+
+search_hotel_by_budget_double_no_food(Budget, Vehicle, Time):-(
+    Vehicle==s->(
+        nl,
+        search_hotel_by_budget_double_no_food_vehicle(Budget, Time, DepartmentName, 
+            Weather, HotelName, Address, Distance, Stars, DoubleRoomPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
+        nl,
+        GasolinePrice = Distance * 2.5,
+        format('  Precio de habitacion doble: Q~a, Gasto de gasolina: Q~2f', 
+            [DoubleRoomPrice, GasolinePrice]),
+        nl,
+        Total = (DoubleRoomPrice + (Distance * 2.5)) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu);
+
+    Vehicle==n->(
+        nl,
+        search_hotel_by_budget_double_no_food_no_vehicle(Budget, Time, DepartmentName, 
+            Weather, HotelName, Address, Stars, DoubleRoomPrice),
+        format('- Hotel: ~a, Direccion: ~a, Estrellas: ~a', [HotelName, Address, Stars]),
+        nl,
+        format('  Departamento: ~a, Clima: ~a', [DepartmentName, Weather]),
+        nl,
+        format('  Precio de habitacion doble: Q~a', [DoubleRoomPrice]),
+        nl,
+        Total = (DoubleRoomPrice) * Time,
+        format('  Gasto total de ~a dias en el hotel: Q~2f', [Time, Total]),
+        nl,
+        nl,
+        fail;
+        hotel_search_menu)).
+
+search_hotel_by_budget_double_no_food_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
+Address, Distance, Stars, DoubleRoomPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    hotel(_, HotelName, Address, Distance, Stars, _, DoubleRoomPrice, _, DepartmentID),
+    ((DoubleRoomPrice + (Distance * 2.5)) * Time) =< Budget.
+
+search_hotel_by_budget_double_no_food_no_vehicle(Budget, Time, DepartmentName, Weather, HotelName, 
+Address, Stars, DoubleRoomPrice):-
+    department(DepartmentID, DepartmentName, _, _, Weather),
+    hotel(_, HotelName, Address, _, Stars, _, DoubleRoomPrice, _, DepartmentID),
+    ((DoubleRoomPrice) * Time) =< Budget.
+
+
+% QUERIES
 query_menu:-
     nl,
     write('Seleccione una opcion:'),
