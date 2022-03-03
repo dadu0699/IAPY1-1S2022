@@ -497,22 +497,24 @@ query_menu_option(X):- (
     X==5->execute_query_5;
     X==6->execute_query_6;
     X==7->execute_query_7;
-    X==8->exit_menu).
+    X==8->init).
 
 
-query_1(CustomerID, FirstName, LastName, Nationality, Opinion):-
+query_1(FirstName, LastName, Nationality, Opinion):-
     registration(_, CustomerID, _, _, _, Opinion),
     Opinion > 5,
     customer(CustomerID, FirstName, LastName, Nationality, _, _).
 
 execute_query_1:-
-    query_1(CustomerID, FirstName, LastName, Nationality, Opinion),
+    nl,
+    query_1(FirstName, LastName, Nationality, Opinion),
     format('Cliente: ~a ~a, NACIONALIDAD: ~a, OPINION: ~a', [FirstName, LastName, Nationality, Opinion]),
     nl,
-    fail.
+    fail;
+    query_menu.
 
 
-query_2(DepartmentID, Language, HotelID, CustomerID, FirstName, LastName, CivilStatus):-
+query_2(FirstName, LastName, CivilStatus):-
     department(DepartmentID, _, _, Language, _),
     Language == 'espanol',
     hotel(HotelID, _, _, _, _, _, _, _, DepartmentID),
@@ -520,51 +522,59 @@ query_2(DepartmentID, Language, HotelID, CustomerID, FirstName, LastName, CivilS
     customer(CustomerID, FirstName, LastName, _, _, CivilStatus).
 
 execute_query_2:-
-    query_2(DepartmentID, Language, HotelID, CustomerID, FirstName, LastName, CivilStatus),
+    nl,
+    query_2(FirstName, LastName, CivilStatus),
     format('CLIENTE: ~a ~a, ESTADO-CIVIL: ~a', [FirstName, LastName, CivilStatus]),
     nl,
-    fail.
+    fail;
+    query_menu.
 
 
-query_3(HotelID, Opinion, Name):-
+query_3(Name):-
     registration(_, _, HotelID, _, _, Opinion),
     Opinion > 5,
     employee(_, Name, _, HotelID).
 
 execute_query_3:-
-    query_3(HotelID, Opinion, Name),
+    nl,
+    query_3(Name),
     format('TRABAJADOR: ~a', [Name]),
     nl,
-    fail.
+    fail;
+    query_menu.
 
 
-query_4(HotelID, Opinion, Name, Job):-
+query_4(Name):-
     registration(_, _, HotelID, _, _, Opinion),
     Opinion == 10,
     employee(_, Name, Job, HotelID),
     Job == administrador.
 
 execute_query_4:-
-    query_4(HotelID, Opinion, Name, Job),
+    nl,
+    query_4(Name),
     format('TRABAJADOR: ~a', [Name]),
     nl,
-    fail.
+    fail;
+    query_menu.
 
 
-query_5(CustomerID, CivilStatus, HotelID, Name, Address):-
+query_5(Name, Address):-
     customer(CustomerID, _, _, _, _, CivilStatus),
     CivilStatus == casado,
     registration(_, CustomerID, HotelID, _, _, _),
     hotel(HotelID, Name, Address, _, _, _, _, _, _).
 
 execute_query_5:-
-    query_5(CustomerID, CivilStatus, HotelID, Name, Address),
+    nl,
+    query_5(Name, Address),
     format('Hotel: ~a, Direccion: ~a', [Name, Address]),
     nl,
-    fail.
+    fail;
+    query_menu.
 
 
-query_6(DepartmentID, LocalLanguage, HotelID, FirstName, LastName, Nationality):-
+query_6(FirstName, LastName, Nationality):-
     department(DepartmentID, _, _, LocalLanguage, _),
     LocalLanguage == katchikel,
     hotel(HotelID, _, _, _, _, _, _, _, DepartmentID),
@@ -573,23 +583,27 @@ query_6(DepartmentID, LocalLanguage, HotelID, FirstName, LastName, Nationality):
     not(Nationality = guatemala).
 
 execute_query_6:-
-    query_6(DepartmentID, LocalLanguage, HotelID, FirstName, LastName, Nationality),
+    nl,
+    query_6(FirstName, LastName, Nationality),
     format('CLIENTE: ~a ~a, Nacionalidad: ~a', [FirstName, LastName, Nationality]),
     nl,
-    fail.
+    fail;
+    query_menu.
 
 
-query_7(CustomerID, CivilStatus, HotelID, Name, Stars):-
+query_7(Name, Stars):-
     customer(CustomerID, _, _, _, _, CivilStatus),
     CivilStatus == divorciado,
     registration(_, CustomerID, HotelID, _, _, _),
     hotel(HotelID, Name, _, _, Stars, _, _, _, _).
 
 execute_query_7:-
-    query_7(CustomerID, CivilStatus, HotelID, Name, Stars),
+    nl,
+    query_7(Name, Stars),
     format('Hotel: ~a, Estrellas: ~a', [Name, Stars]),
     nl,
-    fail.
+    fail;
+    query_menu.
 
 
 exit_menu:-
