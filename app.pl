@@ -495,6 +495,8 @@ query_menu_option(X):- (
     X==3->execute_query_3;
     X==4->execute_query_4;
     X==5->execute_query_5;
+    X==6->execute_query_6;
+    X==7->execute_query_7;
     X==8->exit_menu).
 
 
@@ -558,6 +560,34 @@ query_5(CustomerID, CivilStatus, HotelID, Name, Address):-
 execute_query_5:-
     query_5(CustomerID, CivilStatus, HotelID, Name, Address),
     format('Hotel: ~a, Direccion: ~a', [Name, Address]),
+    nl,
+    fail.
+
+
+query_6(DepartmentID, LocalLanguage, HotelID, FirstName, LastName, Nationality):-
+    department(DepartmentID, _, _, LocalLanguage, _),
+    LocalLanguage == katchikel,
+    hotel(HotelID, _, _, _, _, _, _, _, DepartmentID),
+    registration(_, CustomerID, HotelID, _, _, _),
+    customer(CustomerID, FirstName, LastName, Nationality, _, _),
+    not(Nationality = guatemala).
+
+execute_query_6:-
+    query_6(DepartmentID, LocalLanguage, HotelID, FirstName, LastName, Nationality),
+    format('CLIENTE: ~a ~a, Nacionalidad: ~a', [FirstName, LastName, Nationality]),
+    nl,
+    fail.
+
+
+query_7(CustomerID, CivilStatus, HotelID, Name, Stars):-
+    customer(CustomerID, _, _, _, _, CivilStatus),
+    CivilStatus == divorciado,
+    registration(_, CustomerID, HotelID, _, _, _),
+    hotel(HotelID, Name, _, _, Stars, _, _, _, _).
+
+execute_query_7:-
+    query_7(CustomerID, CivilStatus, HotelID, Name, Stars),
+    format('Hotel: ~a, Estrellas: ~a', [Name, Stars]),
     nl,
     fail.
 
